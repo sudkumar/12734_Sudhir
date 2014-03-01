@@ -33,9 +33,13 @@ if( isset($_POST["long_url"]) && !empty($_POST["long_url"])){
 	$hostname = trim(htmlentities($_POST["long_url"]));	// for security reasons
 	$protocol1 = 'http://';
 	$protocol2 = 'https://';
+	$www = 'www.';
 	$new_hostname = str_ireplace($protocol1, "", $hostname);		//string replacement case insencetive
 	$new_hostname = str_ireplace($protocol2, "",$new_hostname);	
-			
+	if(strpos($new_hostname, $www) === 0){
+	}else {
+		$new_hostname = $www."".$new_hostname; 
+	}			
 	// query for id for the currrent url
 	$query = "SELECT id FROM url WHERE urls =\"$new_hostname\"";
 	$query_run = mysql_query($query);
@@ -52,7 +56,7 @@ if( isset($_POST["long_url"]) && !empty($_POST["long_url"])){
 		$half1_hashed_hostname = substr($hashed_hostname, 0, strlen($hashed_hostname)/2);	
 		$half2_hashed_hostname = substr($hashed_hostname, strlen($hashed_hostname)/2 + 1, strlen($hashed_hostname)); 
 		$up_half2_hashed_hostname = strtoupper($half2_hashed_hostname);
-		$hashed_hostname = implode("", array($half1_hashed_hostname, $up_half2_hashed_hostname) );
+		$hashed_hostname = implode("(~-@", array($half1_hashed_hostname, $up_half2_hashed_hostname) );
 		$shuffled_hostname = str_shuffle($hashed_hostname);
 	
 		//take the id (key) and insert it into the database
